@@ -13,7 +13,7 @@ Future<Set<String>> generateDictionary() async {
   // Directory documentRoot = await getApplicationDocumentsDirectory();
   // String dicPath = documentRoot.path + Platform.pathSeparator + dicName + ".txt";
   // File dicFile = File(dicPath);
-  String dicContents = await rootBundle.loadString("assets/All.txt");
+  String dicContents = await rootBundle.loadString("assets/Somali.txt");
   Set<String> database = {};
   LineSplitter.split(dicContents).forEach((line) {
     database.add(line.toUpperCase());
@@ -26,8 +26,7 @@ Future<Map<String, List<String>>> generateQuestionSet(
   // Directory documentRoot = await getApplicationDocumentsDirectory();
   // String dicPath = documentRoot.path + Platform.pathSeparator + dicName + ".txt";
   // File dicFile = File(dicPath);
-  String dicContents =
-      await rootBundle.loadString("assets/" + dicName + ".txt");
+  String dicContents = await rootBundle.loadString("assets/$dicName.txt");
   Map<String, List<String>> database = {};
   LineSplitter.split(dicContents).forEach((line) {
     var vowelStart = line.indexOf('[');

@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, sort_child_properties_last
+
 /*
  * @Author       : Linloir
  * @Date         : 2022-03-09 22:33:41
@@ -114,8 +116,8 @@ class _SingleSelectionBoxState extends State<SingleSelectionBox>
             : null,
         borderRadius: BorderRadius.circular(widget.borderRadius),
       );
+      // ignore: duplicate_ignore
       return GestureDetector(
-        //Stack best describes the relation between the animation and the container box
         child: AnimatedBuilder(
           animation: _shrinkController,
           builder: (context, child) {

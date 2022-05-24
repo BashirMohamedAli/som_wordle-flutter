@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 /*
  * @Author       : Linloir
  * @Date         : 2022-03-05 20:21:34
@@ -12,23 +14,22 @@ import 'single_selection.dart';
 import 'selection_group.dart';
 import 'scroll_behav.dart';
 import 'package:path_provider/path_provider.dart';
-import 'instruction_pannel.dart';
 import 'dart:io';
 import 'dart:math';
 
 Future<void> loadSettings() async {
   Directory documentsDirectory = await getApplicationDocumentsDirectory();
   String documentsPath = documentsDirectory.path + Platform.pathSeparator;
-  File settings = File(documentsPath + "settings.txt");
+  File settings = File("${documentsPath}settings.txt");
   if (!(await settings.exists())) {
     var defaultSettings = "5\nCET4\nLight";
     settings.writeAsString(defaultSettings);
   }
-  List<String> dicBooks = ["validation.txt", "CET4.txt"];
+  List<String> dicBooks = ["validation.txt", "Somali.txt"];
   for (String dicName in dicBooks) {
     if (!(await File(documentsPath + dicName).exists())) {
       //Copy file
-      ByteData data = await rootBundle.load("assets/CET4.txt");
+      ByteData data = await rootBundle.load("assets/Somali.txt");
       List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(documentsPath + dicName).writeAsBytes(bytes, flush: true);
@@ -75,7 +76,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       scrollBehavior: MyScrollBehavior(),
-      title: 'Wordle',
+      title: 'Som Wordle',
       theme: ThemeData(
         primarySwatch: Colors.grey,
         brightness: brightness,
@@ -126,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 30.0, bottom: 10.0),
-                              child: Text('WORDLE',
+                              child: Text('SOM WORDLE',
                                   style: TextStyle(
                                       fontSize: 30.0,
                                       fontWeight: FontWeight.w300,
@@ -184,14 +185,6 @@ class _HomePageState extends State<HomePage> {
                                           .emit(event: "ToggleTheme", args: []),
                                     ),
                                   ),
-                                  IconButton(
-                                    icon:
-                                        const Icon(Icons.help_outline_outlined),
-                                    //color: Colors.black,
-                                    onPressed: () {
-                                      showInstructionDialog(context: context);
-                                    },
-                                  ),
                                 ])),
                           )
                         ],
@@ -228,14 +221,7 @@ class _OfflinePageState extends State<OfflinePage> {
   int maxChances = 6;
   int dicBookIndex = 0;
   var dicBook = [
-    ["All", "Full wordlist", "A", Colors.indigo],
-    ["HighSchool", "HighSchool wordlist", "H", Colors.amber],
-    ["CET4", "CET4 wordlist", "4", Colors.green[400]],
-    ["CET6", "CET6 wordlist", "6", Colors.teal[400]],
-    ["CET4 + 6", "CET4&6 wordlist", "46", Colors.teal[600]],
-    ["TOEFL Slim", "TOEFL without CET4&6", "T", Colors.blue[400]],
-    ["TOEFL", "Full TOEFL wordlist", "T", Colors.cyan[400]],
-    ["GRE Slim", "GRE without CET4&6", "G", Colors.pink[200]]
+    ["Somali", "Luuqada Soomaliga", "A", Colors.indigo],
   ];
   late final List<Widget> dicBookSelections;
   var wordLenSelectionColors = [
@@ -263,10 +249,10 @@ class _OfflinePageState extends State<OfflinePage> {
       for (int i = 0; i < dicBook.length; i++)
         generateSelectionBox(
           id: i,
-          width: 190,
-          height: 240,
+          width: 150,
+          height: 200,
           padding: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 0.0),
-          color: dicBook[i][3]! as Color,
+          color: dicBook[i][3] as Color,
           primaryText: dicBook[i][0] as String,
           primaryTextSize: 20.0,
           secondaryText: dicBook[i][1] as String,
@@ -382,41 +368,6 @@ class _OfflinePageState extends State<OfflinePage> {
                 ],
               ),
             ),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: (dicBook[dicBookIndex][3]! as Color).withOpacity(0.2),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              margin: const EdgeInsets.all(10.0),
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 0.0, 10.0),
-                    child: Text(
-                      'Word List',
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.bold,
-                        color: (dicBook[dicBookIndex][3]! as Color),
-                      ),
-                    ),
-                  ),
-                  SelectionGroupProvider(
-                    defaultSelection: 0,
-                    onChanged: (sel) => setState(() => dicBookIndex = sel),
-                    selections: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: dicBookSelections,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Row(
@@ -445,7 +396,7 @@ class _OfflinePageState extends State<OfflinePage> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30.0, vertical: 30.0),
                           child: const Text(
-                            'Start Normal',
+                            'Start Game',
                             style: TextStyle(
                               fontSize: 22.0,
                               fontWeight: FontWeight.bold,
@@ -456,34 +407,26 @@ class _OfflinePageState extends State<OfflinePage> {
                       ),
                     ),
                   ),
-                  // Expanded(
-                  //   child: Container(
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.pink[200]!.withOpacity(0.2),
-                  //       borderRadius: BorderRadius.circular(10.0),
-                  //     ),
-                  //     margin: const EdgeInsets.all(10.0),
-                  //     child: InkWell(
-                  //       onTap: (){},
-                  //       borderRadius: BorderRadius.circular(10.0),
-                  //       child: Container(
-                  //         alignment: Alignment.center,
-                  //         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
-                  //         child: Text(
-                  //           'Start Hard',
-                  //           style: TextStyle(
-                  //             fontSize: 22.0,
-                  //             fontWeight: FontWeight.bold,
-                  //             color: Colors.pink[400],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: <Widget>[
+            //     SocalIcon(
+            //       iconSrc: "assets/icons/facebook.svg",
+            //       press: () {},
+            //     ),
+            //     SocalIcon(
+            //       iconSrc: "assets/icons/twitter.svg",
+            //       press: () {},
+            //     ),
+            //     SocalIcon(
+            //       iconSrc: "assets/icons/google-plus.svg",
+            //       press: () {},
+            //     ),
+            //   ],
+            // )
           ],
         ),
       ),

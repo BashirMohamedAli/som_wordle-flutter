@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'event_bus.dart';
 import 'validation_provider.dart';
 import 'display_pannel.dart';
-import 'instruction_pannel.dart';
 import 'popper_generator.dart';
 
 class GamePage extends StatefulWidget {
@@ -40,10 +39,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     if (result == true) {
       _controller.forward().then((v) {
         _controller.reset();
-        mainBus.emit(event: "Result", args: result);
+        mainBus.emit(event: "Natiijo", args: result);
       });
     } else {
-      mainBus.emit(event: "Result", args: result);
+      mainBus.emit(event: "Natiijo", args: result);
     }
   }
 
@@ -82,7 +81,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                 fontWeight: FontWeight.bold,
                 fontSize: 20.0,
               ),
-              title: const Text('WORDLE'),
+              title: const Text('SOM WORDLE'),
               centerTitle: true,
               //iconTheme: const IconThemeData(color: Colors.black),
               actions: [
@@ -124,13 +123,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.help_outline_outlined),
-                  //color: Colors.black,
-                  onPressed: () {
-                    showInstructionDialog(context: context);
-                  },
-                ),
-                IconButton(
                   icon: const Icon(Icons.refresh_rounded),
                   //color: Colors.black,
                   onPressed: () {
@@ -140,6 +132,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               ],
             ),
             body: Container(
+              // ignore: sort_child_properties_last
               child: ValidationProvider(
                 database: widget.database,
                 wordLen: widget.wordLen,

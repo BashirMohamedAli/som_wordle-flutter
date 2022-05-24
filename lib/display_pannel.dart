@@ -157,6 +157,7 @@ class _WordleDisplayWidgetState extends State<WordleDisplayWidget>
                                                   animation: animation,
                                                   child: child,
                                                   builder: (context, child) {
+                                                    // ignore: no_leading_underscores_for_local_identifiers
                                                     var _animation =
                                                         Tween<double>(
                                                                 begin:

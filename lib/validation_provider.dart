@@ -20,8 +20,15 @@ class InputNotification extends Notification {
 
 class ValidationProvider extends StatefulWidget {
   static Set<String> validationDatabase = <String>{};
-  
-  const ValidationProvider({Key? key, required this.child, required this.database, required this.wordLen, required this.maxChances, required this.gameMode}) : super(key: key);
+
+  const ValidationProvider(
+      {Key? key,
+      required this.child,
+      required this.database,
+      required this.wordLen,
+      required this.maxChances,
+      required this.gameMode})
+      : super(key: key);
 
   final Widget child;
   final Map<String, List<String>> database;
@@ -49,7 +56,7 @@ class _ValidationProviderState extends State<ValidationProvider> {
     curAttemptCount = 0;
     acceptInput = true;
     answer = getNextWord(widget.database);
-    if(!ValidationProvider.validationDatabase.contains(answer)){
+    if (!ValidationProvider.validationDatabase.contains(answer)) {
       ValidationProvider.validationDatabase.add(answer);
     }
     letterMap = {};
@@ -76,41 +83,42 @@ class _ValidationProviderState extends State<ValidationProvider> {
 
   void _showResult(bool result) async {
     var startNew = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Result'),
-          content: Text(result ? "Won" : "Lost, answer is ${answer.toLowerCase()}"),
-          actions: [
-            TextButton(
-              child: const Text('Back'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: const Text('New Game'),
-              onPressed: () => Navigator.of(context).pop(true),
-            )
-          ],
-        );
-      }
-    );
-    if(startNew == true) {
-      mainBus.emit(event: "NewGame", args: []);
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Natiijo'),
+            content: Text(result
+                ? "Guuleystay"
+                : "Lumay, Jawaabtu waa ${answer.toLowerCase()}"),
+            actions: [
+              TextButton(
+                child: const Text('Dib u noqo'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              TextButton(
+                child: const Text('Ciyaar Cusub'),
+                onPressed: () => Navigator.of(context).pop(true),
+              )
+            ],
+          );
+        });
+    if (startNew == true) {
+      mainBus.emit(event: "Ciyaar Cusub", args: []);
     }
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _newGame();
-    mainBus.onBus(event: "NewGame", onEvent: _onNewGame);
-    mainBus.onBus(event: "Result", onEvent: _onGameEnd);
+    mainBus.onBus(event: "Ciyaar Cusub", onEvent: _onNewGame);
+    mainBus.onBus(event: "Natiijo", onEvent: _onGameEnd);
   }
 
   @override
   void dispose() {
-    mainBus.offBus(event: "NewGame", callBack: _onNewGame);
-    mainBus.offBus(event: "Result", callBack: _onGameEnd);
+    mainBus.offBus(event: "Ciyaar Cusub", callBack: _onNewGame);
+    mainBus.offBus(event: "Natiijo", callBack: _onGameEnd);
     super.dispose();
   }
 
@@ -119,74 +127,74 @@ class _ValidationProviderState extends State<ValidationProvider> {
     return NotificationListener<InputNotification>(
       child: widget.child,
       onNotification: (noti) {
-        if(noti.type == InputType.inputConfirmation) {
-          if(curAttempt.length < widget.wordLen) {
+        if (noti.type == InputType.inputConfirmation) {
+          if (curAttempt.length < widget.wordLen) {
             //Not enough
             return true;
-          }
-          else {
+          } else {
             //Check validation
-            if(ValidationProvider.validationDatabase.lookup(curAttempt) != null) {
+            if (ValidationProvider.validationDatabase.lookup(curAttempt) !=
+                null) {
               //Generate map
               Map<String, int> leftWordMap = Map.from(letterMap);
-              var positionValRes = <int>[for(int i = 0; i < widget.wordLen; i++) -1];
+              var positionValRes = <int>[
+                for (int i = 0; i < widget.wordLen; i++) -1
+              ];
               var letterValRes = <String, int>{};
-              for(int i = 0; i < widget.wordLen; i++) {
-                if(curAttempt[i] == answer[i]) {
+              for (int i = 0; i < widget.wordLen; i++) {
+                if (curAttempt[i] == answer[i]) {
                   positionValRes[i] = 1;
                   leftWordMap[curAttempt[i]] = leftWordMap[curAttempt[i]]! - 1;
                   letterValRes[curAttempt[i]] = 1;
                 }
               }
-              for(int i = 0; i < widget.wordLen; i++) {
-                if(curAttempt[i] != answer[i] && leftWordMap[curAttempt[i]] != null && leftWordMap[curAttempt[i]]! > 0) {
+              for (int i = 0; i < widget.wordLen; i++) {
+                if (curAttempt[i] != answer[i] &&
+                    leftWordMap[curAttempt[i]] != null &&
+                    leftWordMap[curAttempt[i]]! > 0) {
                   positionValRes[i] = 2;
                   leftWordMap[curAttempt[i]] = leftWordMap[curAttempt[i]]! - 1;
-                  letterValRes[curAttempt[i]] = letterValRes[curAttempt[i]] == 1 ? 1 : 2;
-                }
-                else if(curAttempt[i] != answer[i]) {
+                  letterValRes[curAttempt[i]] =
+                      letterValRes[curAttempt[i]] == 1 ? 1 : 2;
+                } else if (curAttempt[i] != answer[i]) {
                   positionValRes[i] = -1;
                   letterValRes[curAttempt[i]] ??= -1;
                 }
               }
               //emit current attempt
               mainBus.emit(
-                event: "Attempt",
-                args:  positionValRes,
+                event: "Isku day",
+                args: positionValRes,
               );
               mainBus.emit(
-                event: "Validation",
+                event: "Xaqiijinta",
                 args: letterValRes,
               );
               curAttempt = "";
               curAttemptCount++;
-            }
-            else {
+            } else {
               showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text('Info'),
-                    content: const Text('Not a word!'),
-                    actions: [
-                      TextButton(
-                        child: const Text('OK'),
-                        onPressed: () => Navigator.of(context).pop(),
-                      )
-                    ],
-                  );
-                }
-              );
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Xog'),
+                      content: const Text('Eray ma aha'),
+                      actions: [
+                        TextButton(
+                          child: const Text('haye'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        )
+                      ],
+                    );
+                  });
             }
           }
-        }
-        else if(noti.type == InputType.backSpace) {
-          if(curAttempt.isNotEmpty) {
+        } else if (noti.type == InputType.backSpace) {
+          if (curAttempt.isNotEmpty) {
             curAttempt = curAttempt.substring(0, curAttempt.length - 1);
           }
-        }
-        else{
-          if(acceptInput && curAttempt.length < widget.wordLen) {
+        } else {
+          if (acceptInput && curAttempt.length < widget.wordLen) {
             curAttempt += noti.msg;
           }
         }

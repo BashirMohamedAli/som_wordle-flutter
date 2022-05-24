@@ -36,6 +36,7 @@ class _SelectionGroupProviderState extends State<SelectionGroupProvider> {
   @override
   Widget build(BuildContext context) {
     return GroupSharedData(
+      selected: selected,
       child: NotificationListener<SelectNotification>(
         child: widget.selections,
         onNotification: (noti) {
@@ -46,7 +47,6 @@ class _SelectionGroupProviderState extends State<SelectionGroupProvider> {
           return true;
         },
       ),
-      selected: selected,
     );
   }
 }

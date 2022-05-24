@@ -72,7 +72,7 @@ class _LoadingPageState extends State<LoadingPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 15.0),
                       child: Text(
-                        'Loading Libraries',
+                        'Loading....',
                         style: TextStyle(
                             color: Colors.teal[400],
                             fontWeight: FontWeight.bold,
