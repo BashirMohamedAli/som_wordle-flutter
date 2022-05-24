@@ -86,24 +86,23 @@ class _ValidationProviderState extends State<ValidationProvider> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Natiijo'),
-            content: Text(result
-                ? "Guuleystay"
-                : "Lumay, Jawaabtu waa ${answer.toLowerCase()}"),
+            title: const Text('Result'),
+            content: Text(
+                result ? "Won" : "Lost, answer is ${answer.toLowerCase()}"),
             actions: [
               TextButton(
-                child: const Text('Dib u noqo'),
+                child: const Text('Back'),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               TextButton(
-                child: const Text('Ciyaar Cusub'),
+                child: const Text('New Game'),
                 onPressed: () => Navigator.of(context).pop(true),
               )
             ],
           );
         });
     if (startNew == true) {
-      mainBus.emit(event: "Ciyaar Cusub", args: []);
+      mainBus.emit(event: "NewGame", args: []);
     }
   }
 
@@ -111,14 +110,14 @@ class _ValidationProviderState extends State<ValidationProvider> {
   void initState() {
     super.initState();
     _newGame();
-    mainBus.onBus(event: "Ciyaar Cusub", onEvent: _onNewGame);
-    mainBus.onBus(event: "Natiijo", onEvent: _onGameEnd);
+    mainBus.onBus(event: "NewGame", onEvent: _onNewGame);
+    mainBus.onBus(event: "Result", onEvent: _onGameEnd);
   }
 
   @override
   void dispose() {
-    mainBus.offBus(event: "Ciyaar Cusub", callBack: _onNewGame);
-    mainBus.offBus(event: "Natiijo", callBack: _onGameEnd);
+    mainBus.offBus(event: "NewGame", callBack: _onNewGame);
+    mainBus.offBus(event: "Result", callBack: _onGameEnd);
     super.dispose();
   }
 
@@ -163,11 +162,11 @@ class _ValidationProviderState extends State<ValidationProvider> {
               }
               //emit current attempt
               mainBus.emit(
-                event: "Isku day",
+                event: "Attempt",
                 args: positionValRes,
               );
               mainBus.emit(
-                event: "Xaqiijinta",
+                event: "Validation",
                 args: letterValRes,
               );
               curAttempt = "";
@@ -178,7 +177,7 @@ class _ValidationProviderState extends State<ValidationProvider> {
                   builder: (context) {
                     return AlertDialog(
                       title: const Text('Xog'),
-                      content: const Text('Eray ma aha'),
+                      content: const Text('Eray ma aha!'),
                       actions: [
                         TextButton(
                           child: const Text('haye'),
